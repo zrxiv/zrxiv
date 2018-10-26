@@ -1,0 +1,60 @@
+---
+layout: null
+---
+
+<html>
+	<head><title>zrxiv</title></head>
+	<body onhashchange="navigate()" onload="navigate()">
+		<p>Welcome to a <a href="#">zrXiv</a> stash, updated at {{ "now" | date: "%Y-%m-%d %H:%M" }}. Tags:</p>
+		<ul>
+		{% for tag_ in site.data.tags %}
+		{% assign tag = tag_[0] %}
+			<li><a href="#/tags/{{ tag }}">{{ tag }}</a></li>
+		{% endfor %}
+		</ul>
+		<table style="width:100%">
+			<thead>
+				<tr>
+					<th>added</th>
+					<th>title</th>
+					<th>tags</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% assign docs = "" | split:"," %}
+				{% for doc_ in site.data.documents %}
+					{% assign docs = docs | push: doc_[1] %}
+				{% endfor %}
+				{% assign docs = (docs | sort: 'date') | reverse %}
+				
+				{% for doc in docs %}
+				<tr data-tags="{{ doc.tags | join: ' ' }}">
+					<td>{{ doc.date | date: "%Y-%m-%d %H:%M" }}</td>
+					<td><a href="{{ doc.url }}">{{ doc.title }}</a></td>
+					<td>
+						{% for tag in doc.tags %}
+						<a href="#/tags/{{ tag }}">{{ tag }}</a>{% if forloop.last != true %}, {% endif %}
+						{% endfor %}
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<script type="text/javascript">
+			function navigate()
+			{
+				const route_tags = '#/tags/';
+				if(window.location.hash.startsWith(route_tags))
+				{
+					const tag = window.location.hash.substr(route_tags.length);
+					document.querySelectorAll('tbody tr:not([data-tags*="' + tag + '"])').forEach(el => {el.style.display = 'none'});
+					document.querySelectorAll('tbody tr[data-tags*="' + tag + '"]').forEach(el => {el.style.display = ''});
+				}
+				else
+				{
+					document.querySelectorAll('tbody tr').forEach(el => {el.style.display = ''});
+				}
+			}
+		</script>
+	</body>
+</html>
