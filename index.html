@@ -5,7 +5,7 @@ layout: null
 <html>
 	<head><title>zrxiv</title></head>
 	<body onhashchange="navigate()" onload="navigate()">
-		<p>Welcome to <a href="#">zrXiv</a>, updated at {{ "now" | date: "%Y-%m-%d %H:%M" }}</p>
+		<p>Welcome to <a href="#">zrXiv</a>, updated at {{ "now" | date: "%Y-%m-%d %H:%M" }} </p>
 		<p style="overflow:auto">
 			<span style="float:left">Tags:</span>
 			<ul style="display:inline">
@@ -43,7 +43,7 @@ layout: null
 				{% endfor %}
 			</tbody>
 		</table>
-		<script type="text/javascript">
+		<script>
 			function navigate()
 			{
 				const route_tags = '#/tags/';
