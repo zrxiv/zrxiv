@@ -1,5 +1,5 @@
 ### ℤrxiv /ˈziɹkaɪv/
-**zrxiv** is a Chrome browser extension that logs and organizes your visited arxiv.org articles. **zrxiv** uses your personal Github repository as a database and Github Pages to generate a static pretty-looking article list. In order to use **zrxiv** you will need to fork a Github repository and provide Github credentials to the **zrxiv** browser extension (so that it can save information about your visited arxiv articles in form of commits).
+**zrxiv** is a Chrome / Firefox / Edge browser extension that logs and organizes your visited arxiv.org articles. **zrxiv** uses your personal Github repository as a database and Github Pages to generate a static pretty-looking article list. In order to use **zrxiv** you will need to fork a Github repository and provide Github credentials to the **zrxiv** browser extension (so that it can save information about your visited arxiv articles in form of commits).
 
 ### Install
 1. Install the Chrome extension: download https://github.com/zrxiv/browserext/archive/master.zip, unzip it, and load an unpacked extension into Chrome in developer mode
