@@ -17,6 +17,28 @@ layout: null
 		<link rel="icon" href="logo.png" />
 		<link rel="canonical" href="{{ site.github.url }}" />
 		<link rel="stylesheet" href="style.css">
+		<style>
+			ul {margin: 0px; list-style:none; padding:0 !important}
+			ul li{padding:6px 13px;border:1px solid #dfe2e5; margin:0px !important}
+			ul li:nth-child(2n){background-color:#f6f8fa; border-top:0px; border-bottom:0px}
+			ul li:last-child{border-bottom:1px solid #dfe2e5}
+			
+			h1 {overflow-y:auto}
+			
+			.tag {color:red; margin-right: 5px}
+			.tag::before {content: "★"}
+			
+			.author {color:lightgray; font-size:small}
+			.date>a {color:lightgray; font-size:small; white-space:nowrap; margin-right:5px}
+						
+			.doc>div {display:flex}
+			.title {flex-grow:1; /*max-width:80%*/}
+			.tags {display:flex; flex-grow:1; flex-wrap: wrap; justify-content:flex-end}
+			.authors {display:flex; flex-grow:1; flex-wrap:wrap;}
+			.date {display: flex; align-items:flex-end}
+			
+			a.author:not(:last-child)::after {content: ","; margin-right: 2pt}
+		</style>
 	</head>
 	<body onhashchange="navigate()" onload="navigate()">
 		{% assign sortedtags = "" | split: "," %}
@@ -32,62 +54,54 @@ layout: null
 		{% assign docs = (docs | sort: 'date') | reverse %}
 		
 		<div class="container-lg px-3 my-5 markdown-body">
-		<h1><a href="{{ site.github.url }}">ℤrxiv</a> for  {{ site.github.owner_name }} <span style="float:right; font-size:small; color:lightgray" title="updated at {{ site.time | date: "%Y, %B %-d, %H:%M GMT" }}">{{ site.data.documents | size }} docs @ {{ site.time | date: "%Y-%m-%d %H:%M" }} GMT</span></h1>
-		<div style="overflow:auto">
-			<ul style="display:inline">
-			{% for tag in sortedtags %}
-				<li style="margin-left: {% if forloop.first == true %} 1em {%else%} 2em {% endif %} ; float:left; margin-top: 0px"><a href="#/tag/{{ tag }}" style="color:red">{{ tag }}</a></li>
-			{% endfor %}
-			</ul>
-		</div>
-		<br />
-		<table style="width:100%; table-layout:auto">
-			<tbody>
+			<h1><a href="{{ site.github.url }}">ℤrxiv</a> for  {{ site.github.owner_name }} <span style="float:right; font-size:small; color:lightgray" title="updated at {{ site.time | date: "%Y, %B %-d, %H:%M GMT" }}">{{ site.data.documents | size }} docs @ {{ site.time | date: "%Y-%m-%d %H:%M" }} GMT</span></h1>
+			<div style="display:flex; flex-wrap: wrap;">{% for tag in sortedtags %}<a href="#/tag/{{ tag }}" class="tag">{{ tag }}</a>{% endfor %}</div>
+			<br />
+			<ul>
 				{% for doc in docs %}
-				{% assign lastnames = "" | split:"," %}
+				{% assign lastnames = "" | split: "," %}
 				{% for author in doc.author %}
 					{% assign lastname = (author | split: " ") | last %}
 					{% assign lastnames = lastnames | push: lastname %}
 				{% endfor %}
-				
-				<tr data-tags="{{ doc.tags | join: ' ' }}" data-authors="{{ lastnames | join: ' ' }}">
-					<td style="white-space:nowrap; vertical-align:top" title="added at {{ doc.date | date: "%Y, %B %-d, %H:%M GMT" }}">{{ doc.date | date: "%Y-%m-%d" }}</td>
-					<td style="vertical-align:top; width:100%">
-						<a href="{{ doc.url }}">{{ doc.title }}</a><br />
-						{% for author in doc.author %}
-							{% assign lastname = (author | split: " ") | last %}
-							<small><a href="#/author/{{ lastname }}" style="color:lightgray" title="{{ author }}">{{ lastname }}</a>{% if forloop.last != true %}<span style="color:lightgray">, </span>{% endif %}</small>
-						{% endfor %}
-						<ul style="display: inline; float: right; margin:0px">
-						{% for tag in doc.tags %}
-							<li style="margin-left: 2em; float:left; margin-top:0px"><a href="#/tag/{{ tag }}" style="color:red">{{ tag }}</a></li>
-						{% endfor %}
-						</ul>
-					</td>
-				</tr>
+				<li class="doc" data-tags="{{ doc.tags | join: ' ' }}" data-authors="{{ lastnames | join: ' ' }}" data-date="{{ doc.date | date: "%Y-%m-%d" }}">
+					<div>
+						<div class="title"><a class="title" href="{{ doc.url }}">{{ doc.title }}</a></div>
+						<div class="tags">{% for tag in doc.tags %}<a href="#/tag/{{ tag }}" class="tag">{{ tag }}</a>{% endfor %}</div>
+					</div>
+					<div>
+						<div class="authors">{% for author in doc.author %}{% assign lastname = (author | split: " ") | last %}<a href="#/author/{{ lastname }}" class="author" title="{{ author }}">{{ lastname }}</a>{% endfor %}</div>
+						<div class="date" title="added at {{ doc.date | date: "%Y, %B %-d, %H:%M GMT" }}"><a href="#/date/{{ doc.date | date: "%Y-%m-%d" }}">{{ doc.date | date: "%Y-%m-%d" }}</a></div>
+					</div>
+				</li>
 				{% endfor %}
-			</tbody>
-		</table>
+			</ul>
 		</div>
 		<script type="text/javascript">
 			function navigate()
 			{
-				const route_tags = '#/tag/', route_authors = '#/author/';
+				const route_tags = '#/tag/', route_authors = '#/author/', route_date = '#/date/';
 				if(window.location.hash.startsWith(route_tags))
 				{
 					const tag = window.location.hash.substr(route_tags.length);
-					document.querySelectorAll('tbody tr:not([data-tags~="' + tag + '"])').forEach(el => {el.style.display = 'none'});
-					document.querySelectorAll('tbody tr[data-tags~="' + tag + '"]').forEach(el => {el.style.display = ''});
+					document.querySelectorAll('li:not([data-tags~="' + tag + '"])').forEach(el => {el.style.display = 'none'});
+					document.querySelectorAll('li[data-tags~="' + tag + '"]').forEach(el => {el.style.display = ''});
 				}
 				else if(window.location.hash.startsWith(route_authors))
 				{
 					const author = window.location.hash.substr(route_authors.length);
-					document.querySelectorAll('tbody tr:not([data-authors~="' + author + '"])').forEach(el => {el.style.display = 'none'});
-					document.querySelectorAll('tbody tr[data-authors~="' + author + '"]').forEach(el => {el.style.display = ''});
+					document.querySelectorAll('li:not([data-authors~="' + author + '"])').forEach(el => {el.style.display = 'none'});
+					document.querySelectorAll('li[data-authors~="' + author + '"]').forEach(el => {el.style.display = ''});
+				}
+				else if(window.location.hash.startsWith(route_date))
+				{
+					const date = window.location.hash.substr(route_date.length);
+					document.querySelectorAll('li:not([data-date^="' + date + '"])').forEach(el => {el.style.display = 'none'});
+					document.querySelectorAll('li[data-date^="' + date + '"]').forEach(el => {el.style.display = ''});
 				}
 				else
 				{
-					document.querySelectorAll('tbody tr').forEach(el => {el.style.display = ''});
+					document.querySelectorAll('li').forEach(el => {el.style.display = ''});
 				}
 			}
 		</script>
