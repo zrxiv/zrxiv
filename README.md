@@ -5,7 +5,8 @@
 1. Install the **zrxiv** browser extension from [Chrome Web Store](https://chrome.google.com/webstore/detail/oleagdnnlndgacibahnhoedjlcdlicoo/publish-accepted?authuser=0&hl=en-US) or [Mozilla Add-ons](https://addons.mozilla.org/en-US/firefox/addon/zrxiv/)
 2. [Fork](https://github.com/zrxiv/zrxiv/fork) this repo
 3. Go to **zrxiv** extension options and enter the URL to your forked repo and a Github [personal access token](https://github.com/settings/tokens)
-4. A zrxiv pane will appear on top of `https://arxiv.org/abs/*` pages, the saved papers are available at your repo's [Github Pages](../../settings/pages/status): `https://YOURGITHUBUSERNAME.github.io/zrxiv`
+4. A zrxiv pane will appear on top of `https://arxiv.org/abs/*` pages
+5. Saved papers are available at your repo's Github Pages: `https://YOURGITHUBUSERNAME.github.io/zrxiv`
 
 ### Update
 ```shell
